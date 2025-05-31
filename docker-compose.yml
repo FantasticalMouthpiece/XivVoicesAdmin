@@ -1,0 +1,17 @@
+﻿version: '3'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: xiv-voices-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: xivvoices
+      POSTGRES_PASSWORD: xivvoices_password
+      POSTGRES_DB: xivvoices_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

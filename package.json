@@ -4,6 +4,7 @@
   "description": "An Admin Panel and API service for the XIV Voices plugin.",
   "main": "next.config.js",
   "dependencies": {
+    "@prisma/client": "^6.8.2",
     "busboy": "^1.6.0",
     "caniuse-lite": "^1.0.30001720",
     "client-only": "^0.0.1",
@@ -38,12 +39,21 @@
     "uuid": "^8.3.2",
     "yallist": "^4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "22.15.29",
+    "@types/react": "19.1.6",
+    "prisma": "^6.8.2"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:studio": "prisma studio",
+    "db:start": "docker-compose up -d",
+    "db:stop": "docker-compose down"
   },
   "repository": {
     "type": "git",

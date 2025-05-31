@@ -6,6 +6,8 @@ An Admin Panel and API service for the XIV Voices plugin.
 
 - Next.js with TypeScript
 - Discord OAuth authentication
+- Prisma ORM with PostgreSQL database
+- Docker for database management
 
 ## Getting Started
 
@@ -14,6 +16,7 @@ An Admin Panel and API service for the XIV Voices plugin.
 - Node.js 14.x or later
 - npm or yarn
 - Discord Developer Account
+- Docker and Docker Compose
 
 ### Setup
 
@@ -45,7 +48,7 @@ yarn install
    - Generate a random string for NEXTAUTH_SECRET (you can use `openssl rand -base64 32`)
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env
 ```
 
 5. Run the development server:
@@ -56,13 +59,47 @@ npm run dev
 yarn dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+6. Start the PostgreSQL database using Docker:
+
+```bash
+docker-compose up -d
+```
+
+7. Push the Prisma schema to the database:
+
+```bash
+npx prisma db push
+```
+
+8. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Database Management
+
+This project uses Prisma ORM with a PostgreSQL database running in Docker.
+
+### Docker Commands
+
+- Start the database: `docker-compose up -d`
+- Stop the database: `docker-compose down`
+- View logs: `docker-compose logs -f postgres`
+
+### Prisma Commands
+
+- Generate Prisma Client: `npx prisma generate`
+- Push schema changes to database: `npx prisma db push`
+- Open Prisma Studio (database GUI): `npx prisma studio`
+- Create and apply migrations: `npx prisma migrate dev --name <migration-name>`
 
 ## Deployment
 
 This application can be deployed to platforms like Vercel, Netlify, or any other hosting service that supports Next.js.
 
 When deploying, make sure to set the environment variables in your hosting provider's dashboard.
+
+For the database, you can either:
+- Use a managed PostgreSQL service (like AWS RDS, DigitalOcean Managed Databases, etc.)
+- Run your own PostgreSQL instance
+- Use a database-as-a-service provider (like Supabase, Neon, etc.)
 
 ## License
 
