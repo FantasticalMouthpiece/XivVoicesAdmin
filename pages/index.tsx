@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 export default function Home() {
   const { data: session, status } = useSession();
   const loading = status === 'loading';
+  const user = session?.user;
 
   return (
     <div className={styles.container}>
@@ -22,7 +23,7 @@ export default function Home() {
         <div className={styles.authContainer}>
           {loading && <div>Loading...</div>}
 
-          {!loading && !session && (
+          {!loading && !user && (
             <>
               <p>You are not signed in</p>
               <button
@@ -34,19 +35,19 @@ export default function Home() {
             </>
           )}
 
-          {session && (
+          {user && (
             <>
               <div className={styles.userInfo}>
-                {session.user?.image && (
+                {user.image && (
                   <img
-                    src={session.user.image}
-                    alt={session.user.name || 'User'}
+                    src={user.image}
+                    alt={user.name}
                     className={styles.avatar}
                   />
                 )}
                 <div>
-                  <p>Signed in as {session.user?.name}</p>
-                  <p>{session.user?.email}</p>
+                  <p>Signed in as {user.name}</p>
+                  <p>{user.email}</p>
                 </div>
               </div>
               <button

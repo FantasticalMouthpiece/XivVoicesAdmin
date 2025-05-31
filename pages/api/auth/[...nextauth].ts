@@ -67,17 +67,20 @@ export default NextAuth({
       // With database sessions, the user object is available
       if (user) {
         // Add user properties to the session
-        session.user.id = user.id;
-        session.user.discordId = user.discordId;
-        session.user.role = user.role;
+        // TODO: Determine why types for name and image are being overwritten
+        session.user = {
+          ...user,
+          name: user.name || '',
+          image: user.image || '',
+        }
 
         // If we still have access to the token (during the transition), get the access token
         if (token?.accessToken) {
-          session.accessToken = token.accessToken as string;
+          session.accessToken = token.accessToken;
         }
       } else if (token) {
         // Fallback for JWT strategy if we switch back
-        session.accessToken = token.accessToken as string;
+        session.accessToken = token.accessToken;
       }
 
       return session;
@@ -93,8 +96,10 @@ export default NextAuth({
           await prisma.user.update({
             where: { id: user.id },
             data: {
-              discordId: profile.id as string,
-              // Add any other Discord profile data you want to store
+              discordId: profile.id,
+              name: profile.name,
+              image: profile.image,
+              email: profile.email,
             },
           });
         } catch (error) {
