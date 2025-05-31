@@ -8,6 +8,8 @@ declare module 'next-auth' {
     accessToken?: string;
     user?: {
       id?: string;
+      discordId?: string;
+      role?: string;
     } & DefaultSession['user'];
   }
 }
