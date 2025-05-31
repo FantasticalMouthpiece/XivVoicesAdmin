@@ -70,3 +70,19 @@ enum Role {
   ADMIN
   MODERATOR
 }
+
+model Report {
+  id         String  @id @default(cuid())
+  speaker    String
+  sentence   String
+  npcId      String
+  skeletonId String
+  body       String
+  gender     String
+  race       String
+  tribe      String
+  eyes       String
+  folder     String
+  user       String
+  comment    String?
+}

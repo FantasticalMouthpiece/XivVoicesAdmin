@@ -43,6 +43,7 @@
   "devDependencies": {
     "@types/node": "22.15.29",
     "@types/react": "19.1.6",
+    "prettier": "3.5.3",
     "prisma": "^6.8.2"
   },
   "scripts": {
