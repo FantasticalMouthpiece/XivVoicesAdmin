@@ -1,11 +1,10 @@
-﻿import NextAuth from 'next-auth';
-import DiscordProvider from 'next-auth/providers/discord';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from '@/lib/prisma';
+﻿import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: [
@@ -15,7 +14,7 @@ export default NextAuth({
       // Request additional permissions from Discord
       authorization: {
         params: {
-          scope: 'identify email guilds',
+          scope: "identify email guilds",
         },
       },
     }),
@@ -31,7 +30,7 @@ export default NextAuth({
 
   session: {
     // Use database strategy for sessions when using an adapter
-    strategy: 'database',
+    strategy: "database",
     // Seconds - How long until an idle session expires and is no longer valid
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
@@ -45,7 +44,7 @@ export default NextAuth({
 
   // You can define custom pages to override the built-in ones
   pages: {
-    signIn: '/', // Use the home page for sign in
+    signIn: "/", // Use the home page for sign in
     // signOut: '/auth/signout',
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
@@ -57,7 +56,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, account, profile }) {
       // Persist the Discord access_token to the token right after sign in
-      if (account?.provider === 'discord') {
+      if (account?.provider === "discord") {
         token.accessToken = account.access_token;
         token.discordProfile = profile;
       }
@@ -70,9 +69,9 @@ export default NextAuth({
         // TODO: Determine why types for name and image are being overwritten
         session.user = {
           ...user,
-          name: user.name || '',
-          image: user.image || '',
-        }
+          name: user.name || "",
+          image: user.image || "",
+        };
 
         // If we still have access to the token (during the transition), get the access token
         if (token?.accessToken) {
@@ -90,7 +89,7 @@ export default NextAuth({
   // Events are useful for logging
   events: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === 'discord' && profile) {
+      if (account?.provider === "discord" && profile) {
         try {
           // Update user with Discord-specific information
           await prisma.user.update({
@@ -103,12 +102,16 @@ export default NextAuth({
             },
           });
         } catch (error) {
-          console.error('Error updating user with Discord data:', error);
+          console.error("Error updating user with Discord data:", error);
         }
       }
     },
   },
 
   // Enable debug messages in the console if you are having problems
-  debug: process.env.NODE_ENV === 'development',
-});
+  debug: process.env.NODE_ENV === "development",
+};
+
+// For more information on each option (and a full list of options) go to
+// https://next-auth.js.org/configuration/options
+export default NextAuth(authOptions);
