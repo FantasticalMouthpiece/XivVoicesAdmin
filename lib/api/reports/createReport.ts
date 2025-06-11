@@ -55,9 +55,12 @@ export default async function createReport(
       comment,
     };
 
+    // Look for reports about the same line regardless of user/comment.
+    const { user: _, comment: __, ...queryData } = data;
+
     // Return the existing entry if it already exists
     const existingEntry = await prisma.report.findFirst({
-      where: { ...data },
+      where: queryData,
     });
 
     if (existingEntry) {
