@@ -119,7 +119,10 @@ export default function Layout({
             </List>
             <Divider />
             <List>
-              <ListItem onClick={() => signOut()}>
+              <ListItem
+                onClick={() => signOut()}
+                sx={{ ":hover": { cursor: "pointer" } }}
+              >
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
