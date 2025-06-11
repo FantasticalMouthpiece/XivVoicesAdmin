@@ -139,7 +139,7 @@ export default function Layout({
           mt: "64px", // AppBar height
         }}
       >
-        <Container maxWidth="lg">{children}</Container>
+        <Container maxWidth="xl">{children}</Container>
       </Box>
     </Box>
   );
