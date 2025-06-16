@@ -8,6 +8,8 @@ const nextConfig = {
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
 };
 
 module.exports = nextConfig;

@@ -7,7 +7,7 @@ An Admin Panel and API service for the XIV Voices plugin.
 - Next.js with TypeScript
 - Discord OAuth authentication
 - Prisma ORM with PostgreSQL database
-- Docker for database management
+- Fully dockerized for both development and production environments
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ An Admin Panel and API service for the XIV Voices plugin.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/XivVoicesAdmin.git
+git clone https://github.com/FantasticalMouthpiece/XivVoicesAdmin.git
 cd XivVoicesAdmin
 ```
 
@@ -51,18 +51,18 @@ yarn install
 cp .env.example .env
 ```
 
-5. Run the development server:
+5. Start the PostgreSQL database using Docker:
+
+```bash
+docker-compose up -d postgres
+```
+
+6. Run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-```
-
-6. Start the PostgreSQL database using Docker:
-
-```bash
-docker-compose up -d
 ```
 
 7. Push the Prisma schema to the database:
@@ -79,9 +79,12 @@ This project uses Prisma ORM with a PostgreSQL database running in Docker.
 
 ### Docker Commands
 
-- Start the database: `docker-compose up -d`
-- Stop the database: `docker-compose down`
-- View logs: `docker-compose logs -f postgres`
+- Start the database only: `docker-compose up -d postgres`
+- Start the entire application (including database): `docker-compose up -d`
+- Stop all containers: `docker-compose down`
+- View database logs: `docker-compose logs -f postgres`
+- View application logs: `docker-compose logs -f app`
+- View all logs: `docker-compose logs -f`
 
 ### Prisma Commands
 
@@ -92,7 +95,37 @@ This project uses Prisma ORM with a PostgreSQL database running in Docker.
 
 ## Deployment
 
-This application can be deployed to platforms like Vercel, Netlify, or any other hosting service that supports Next.js.
+### Docker Deployment
+
+For production environments, a separate configuration file is provided:
+
+1. Create a `.env.production` file with your production environment variables:
+```bash
+cp .env.production.example .env.production
+# Edit the .env.production file with your production values
+```
+
+2. Build and start the containers using the production configuration:
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+3. The application will be available at your configured domain.
+
+4. To stop the application:
+```bash
+docker-compose -f docker-compose.prod.yml down
+```
+
+The production configuration includes:
+- More secure database settings
+- Environment variable substitution for sensitive data
+- Optional reverse proxy configuration (commented out by default)
+- Proper security settings for a production environment
+
+### Other Deployment Options
+
+This application can also be deployed to platforms like Vercel, Netlify, or any other hosting service that supports Next.js.
 
 When deploying, make sure to set the environment variables in your hosting provider's dashboard.
 
