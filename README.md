@@ -43,7 +43,7 @@ yarn install
    - Copy the Client ID and Client Secret
 
 4. Set up environment variables:
-   - Copy `.env.local.example` to `.env.local`
+   - Copy `.env.example` to `.env`
    - Fill in your Discord Client ID and Client Secret
    - Generate a random string for NEXTAUTH_SECRET (you can use `openssl rand -base64 32`)
 
