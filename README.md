@@ -99,29 +99,23 @@ This project uses Prisma ORM with a PostgreSQL database running in Docker.
 
 For production environments, a separate configuration file is provided:
 
-1. Create a `.env.production` file with your production environment variables:
+1. Create a `.env` file with your production environment variables:
 ```bash
-cp .env.production.example .env.production
-# Edit the .env.production file with your production values
+cp .env.example .env
+# Edit the .env file with your production values
 ```
 
 2. Build and start the containers using the production configuration:
 ```bash
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose up -d
 ```
 
 3. The application will be available at your configured domain.
 
 4. To stop the application:
 ```bash
-docker-compose -f docker-compose.prod.yml down
+docker-compose down
 ```
-
-The production configuration includes:
-- More secure database settings
-- Environment variable substitution for sensitive data
-- Optional reverse proxy configuration (commented out by default)
-- Proper security settings for a production environment
 
 ### Other Deployment Options
 

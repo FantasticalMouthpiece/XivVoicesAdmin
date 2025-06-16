@@ -5,24 +5,25 @@
       dockerfile: Dockerfile
     container_name: xiv-voices-admin
     ports:
-      - "3000:3000"
+      - "${APP_PORT}:${APP_PORT}"
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://xivvoices:xivvoices_password@postgres:5432/xivvoices_db?schema=public
-      - NEXTAUTH_URL=http://localhost:3000
-      # The following environment variables should be set in a .env file or through Docker secrets in production
-      # - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-      # - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
-      # - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      NODE_ENV: ${NODE_ENV}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_SCHEMA: ${POSTGRES_SCHEMA:-public}
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}?schema: ${POSTGRES_SCHEMA:-public}"
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
     env_file:
       - .env
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
-    # Add a healthcheck to ensure the application is running properly
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:${APP_PORT}"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -32,16 +33,16 @@
     image: postgres:latest
     container_name: xiv-voices-postgres
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     environment:
-      POSTGRES_USER: xivvoices
-      POSTGRES_PASSWORD: xivvoices_password
-      POSTGRES_DB: xivvoices_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U xivvoices"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
